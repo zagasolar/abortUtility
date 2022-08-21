@@ -1,4 +1,4 @@
-package com.redhat;
+package com.citi;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.auth.AuthScope;
@@ -12,11 +12,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import com.citi.httpclient.HttpClient;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.redhat.httpclient.HttpClient;
 
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -26,9 +26,10 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-public class App {
+public class Appold {
 
-    private static final Logger logger = LogManager.getLogger(App.class);
+    private static final Logger logger = LogManager.getLogger(Appold.class);
+    
     public static void main(String[] args) throws IOException {
 
         logger.debug("This is a debug message");

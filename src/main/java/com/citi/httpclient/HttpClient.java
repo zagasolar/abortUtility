@@ -1,4 +1,4 @@
-package com.redhat.httpclient;
+package com.citi.httpclient;
 
 import java.io.FileInputStream;
 import java.io.IOException;
