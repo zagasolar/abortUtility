@@ -121,7 +121,7 @@ public class AbortProcesses {
        // String containerId = System.getProperty("CONTAINERID", "Gateway_1.0.0-SNAPSHOT");
 
        
-        
+	   String kieServerUrl = System.getProperty("KIE_SERVER_URL","http://localhost:8080");
         
         
         String listString = "";
@@ -133,7 +133,7 @@ public class AbortProcesses {
         
         listString = listString.substring(0, listString.length() - 1);
         
-        String deleteUrl = "http://localhost:8080/kie-server/services/rest/server/containers/" + 
+        String deleteUrl = kieServerUrl + "/kie-server/services/rest/server/containers/" + 
         					this.containerId + "/processes/instances?" + listString;
         
         HttpDelete deleteRequest = new HttpDelete(deleteUrl);
@@ -235,8 +235,8 @@ public class AbortProcesses {
     	
 		System.setProperty("AUTH", "basic");
 		System.setProperty("USERNAME", "rhpamAdmin");
-        System.setProperty("PASSWORD", "jboss123$");
-        
+        System.setProperty("PASSWORD", "Surendhar3298");
+        System.setProperty("KIE_SERVER_URL","http://localhost:8080");
         
         logger.info("Abort utility started ");
 

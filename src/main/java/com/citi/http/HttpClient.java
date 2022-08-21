@@ -24,6 +24,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.ssl.SSLContexts;
 
@@ -54,6 +55,18 @@ public class HttpClient {
                     SSLConnectionSocketFactory.getDefaultHostnameVerifier());
         
         httpClient = HttpClients.custom().setSSLSocketFactory(csf).build();
+        return httpClient;
+    }
+
+    public CloseableHttpClient getHttpClientWithCertAuth(PoolingHttpClientConnectionManager connManager) throws IOException, CertificateException, KeyManagementException, UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException {
+        CloseableHttpClient httpClient = null;
+        SSLConnectionSocketFactory csf = null;
+        
+            csf = new SSLConnectionSocketFactory(
+                    createSslContext(),
+                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+        
+        httpClient = HttpClients.custom().setConnectionManager(connManager).setSSLSocketFactory(csf).build();
         return httpClient;
     }
 

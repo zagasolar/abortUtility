@@ -58,7 +58,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>com.redhat.App</mainClass>
+                <mainClass>com.citi.App</mainClass>
               </manifest>
             </archive>
             <descriptorRefs>

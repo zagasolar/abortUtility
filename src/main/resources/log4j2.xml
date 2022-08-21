@@ -8,7 +8,7 @@
         <Console name="console" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
-        <RollingFile name="errorLog" fileName="D:\JavaIDE\customutility\app-error.log" filePattern="D:\JavaIDE\customutility\app-error-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="errorLog" fileName="D:\JavaIDE\abortUtility\app-error.log" filePattern="D:\JavaIDE\abortUtility\app-error-%d{yyyy-MM-dd}-%i.log">
             <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
             <PatternLayout pattern="${LOG_PATTERN}" />
             <Policies>
@@ -16,8 +16,8 @@
             </Policies>
             <DefaultRolloverStrategy max="10" />
         </RollingFile>
-        <RollingFile name="debugLog" fileName="D:\JavaIDE\customutility\app-debug.log"
-            filePattern="D:\JavaIDE\customutility\app-debug-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="debugLog" fileName="D:\JavaIDE\abortUtility\app-debug.log"
+            filePattern="D:\JavaIDE\abortUtility\app-debug-%d{yyyy-MM-dd}-%i.log">
             <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
