@@ -201,6 +201,8 @@ public class MultiThreadAbortProcess {
 
         @Override
         public void run() {
+
+
             try {
                 CloseableHttpResponse response = client.execute(deleteRequest);
                 HttpEntity entity = response.getEntity();
@@ -211,12 +213,10 @@ public class MultiThreadAbortProcess {
                 else{
                     logger.info(" Some error happened during abort , please verify the log. status code ->  " + status);
                 }
-                // if (entity != null) {
-                //     String result = EntityUtils.toString(entity);
-                //     logger.info("Aborted processes result --------> " + result);
-                // }
+     
+
             } catch (IOException e) {
-                logger.error("Error in aborting processes " + e.getMessage());
+                logger.error("Error in aborting processes ---------->" + e.getMessage());
             }
         }
 
