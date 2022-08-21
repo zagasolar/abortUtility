@@ -18,7 +18,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.citi.App;
 import com.citi.http.HttpClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -26,7 +25,7 @@ import com.google.gson.JsonParser;
 
 public class AbortProcesses {
 	
-    private static final Logger logger = LogManager.getLogger(App.class);
+    private static final Logger logger = LogManager.getLogger(AbortProcesses.class);
 
 	private String containerId ;
 	
@@ -199,7 +198,7 @@ public class AbortProcesses {
 			
 			htplClient = getHttpClinet();
 			
-			//get active instance
+			//get active instance based on status code 1
 			List<Long> processInstanceIds = getActiveProcesses(htplClient,"1");
 			
 			int noPId = processInstanceIds.size();
@@ -211,8 +210,10 @@ public class AbortProcesses {
 				
 				logger.info(" number of active process beig Aborted ---->  "  + noPId);
 
+				// abort all active instance 
 				abortProcesses(htplClient,processInstanceIds);
 				
+				//mkae sure that all of the aborted 
 				List<Long> abortedPprocessInstanceIds1 = getActiveProcesses(htplClient,"3");
 				
 				logger.info(" number of active process  Aborted ---->  "  + abortedPprocessInstanceIds1.size());
