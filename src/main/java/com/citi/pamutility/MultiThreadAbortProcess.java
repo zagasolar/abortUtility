@@ -88,24 +88,36 @@ public class MultiThreadAbortProcess {
         Integer subStringStart = 0;
         Integer subStringEnd = 10;
         List<String> abortList = new ArrayList<String>();
-        // while (pid > 0) {
-        //     List<Long> processIds = null;
-        //     if (pid < 10) {
-        //         processIds = activeProcesses.subList(subStringStart, subStringStart+pid);
-        //     } else {
-        //         processIds = activeProcesses.subList(subStringStart, subStringEnd);
-        //     }
-        //     StringBuilder sb = new StringBuilder();
-        //     for (Long processId : processIds) {
-        //         sb.append("processInstanceId=" + processId + "&");
-        //     }
-        //     String abortURL = kieServerUrl + "/kie-server/services/rest/server/containers/"
-        //             + this.containerId + "/processes/instances/abort?" + sb.toString();
-        //     logger.info("Aborting processes from URL " + abortURL);
-        //     subStringStart = subStringEnd;
-        //     subStringEnd += 10;
-        //     pid -= 10;
-        // }
+        while (pid > 0) {
+            List<Long> processIds = null;
+            if (pid > 10) {
+                processIds = activeProcesses.subList(subStringStart, subStringEnd);
+                // logger.info("Process Ids " + processIds);
+                subStringStart = subStringEnd;
+                subStringEnd = subStringEnd + 10;
+                pid = pid - 10;
+            } else {
+                processIds = activeProcesses.subList(subStringStart, activeProcesses.size());
+                pid = 0;
+                // logger.info("Process Ids " + processIds);
+            }
+            String listString = "";
+
+            for (Long processId : processIds) {
+
+                listString += "instanceId=" + processId + "&";
+            }
+
+            listString = listString.substring(0, listString.length() - 1);
+
+            String deleteUrl = kieServerUrl + "/kie-server/services/rest/server/containers/" +
+                    this.containerId + "/processes/instances?" + listString;
+
+            // logger.info("Aborting processes from URL " + deleteUrl);
+
+            abortList.add(deleteUrl);
+
+        }
         logger.info("Aborted processes " + abortList);
     }
 
