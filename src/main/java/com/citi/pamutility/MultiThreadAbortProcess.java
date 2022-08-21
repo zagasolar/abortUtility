@@ -81,7 +81,7 @@ public class MultiThreadAbortProcess {
         return activeProcesses;
     }
 
-    public void abortProcesses(List<Long> activeProcesses) throws IOException {
+    public List<String> abortProcessesList(List<Long> activeProcesses) throws IOException {
         String kieServerUrl = System.getProperty("KIE_SERVER_URL", "http://localhost:8080");
         logger.info("Aborting processes " + activeProcesses.size());
         Integer pid = activeProcesses.size();
@@ -113,13 +113,15 @@ public class MultiThreadAbortProcess {
             String deleteUrl = kieServerUrl + "/kie-server/services/rest/server/containers/" +
                     this.containerId + "/processes/instances?" + listString;
 
-            // logger.info("Aborting processes from URL " + deleteUrl);
+            logger.info("Aborting processes from URL " + deleteUrl);
 
             abortList.add(deleteUrl);
 
         }
-        logger.info("Aborted processes " + abortList);
+        // logger.info("Aborted processes " + abortList);
+        return abortList;
     }
+
 
     public void multiabortProcess() throws IOException, KeyManagementException, UnrecoverableKeyException,
             CertificateException, KeyStoreException, NoSuchAlgorithmException {
@@ -158,12 +160,66 @@ public class MultiThreadAbortProcess {
             }
         }
         List<Long> activeProcesses = getActiveProcessesInstances(client, "1");
+        List<String> abortList;
         logger.info("Active Processes are " + activeProcesses);
         if (activeProcesses.size() == 0) {
             logger.info("No active processes to delete");
         } else {
-            abortProcesses(activeProcesses);
+            abortList = abortProcessesList(activeProcesses);
+            try {
+                final GetThread[] threads = new GetThread[abortList.size()];
+                // finalAbortList(abortList);
+                for (String deleteUrl : abortList) {
+                    HttpDelete deleteRequest = new HttpDelete(deleteUrl);
+                    deleteRequest.addHeader("Accept", "application/json");
+                    deleteRequest.addHeader("Content-Type", "application/json");
+                    threads[abortList.indexOf(deleteUrl)] = new GetThread(deleteRequest, client);
+                }
+                for (GetThread thread : threads) {
+                    thread.start();
+                }
+                for (GetThread thread : threads) {
+                    thread.join();
+                }
+            } catch (Exception e) {
+                logger.info("IOException for multiabortProcess------>" + e.getMessage());
+                e.printStackTrace();
+            }
         }
+    }
+
+    static class GetThread extends Thread {
+
+        private HttpDelete deleteRequest;
+        private CloseableHttpClient client;
+
+        public GetThread(HttpDelete deleteRequest, CloseableHttpClient client) {
+
+            this.deleteRequest = deleteRequest;
+            this.client = client;
+        }
+
+        @Override
+        public void run() {
+            try {
+                CloseableHttpResponse response = client.execute(deleteRequest);
+                HttpEntity entity = response.getEntity();
+                int status = response.getStatusLine().getStatusCode();
+                if (status == 204){
+                    logger.info("Aborted processes result successful--------> " + status);
+                }
+                else{
+                    logger.info(" Some error happened during abort , please verify the log. status code ->  " + status);
+                }
+                // if (entity != null) {
+                //     String result = EntityUtils.toString(entity);
+                //     logger.info("Aborted processes result --------> " + result);
+                // }
+            } catch (IOException e) {
+                logger.error("Error in aborting processes " + e.getMessage());
+            }
+        }
+
     }
 
     public static void main(String[] args) throws Exception {
