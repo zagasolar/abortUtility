@@ -46,7 +46,7 @@ public class MultiThreadAbortProcess {
         List<Long> activeProcesses = new ArrayList<Long>();
         String kieServerUrl = System.getProperty("KIE_SERVER_URL", "http://localhost:8080");
         Integer page_count = 0;
-        Integer page_size = 10;
+        Integer page_size = 100;
         while (active) {
             logger.info("Getting active processes from page " + page_count);
             logger.info("Getting active processes from size " + page_size);
